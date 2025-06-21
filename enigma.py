@@ -116,7 +116,7 @@ class Rotor:
         self.Access = Rotor.MODELS["ENTRY"]  # Right side of the Rotor
         self.Position = position  # The position for the rotor
         self.Model = model.upper().strip()
-        if model not in Rotor.MODELS:
+        if self.Model not in Rotor.MODELS:
             raise ValueError(f"This program only supports the following rotor models: {', '.join(Rotor.MODELS)}.")
         self.Rotor = Rotor.MODELS[self.Model]  # Left side of the Rotor.
         self.Window = window.upper().strip()  # The window for the operatior to see in the enigma machine.
