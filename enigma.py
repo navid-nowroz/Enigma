@@ -19,6 +19,9 @@ def main():
                 print(Machine.Encryption(char))
 
 def setup_enigma():
+    """
+    Parses command-line arguments and sets up the Enigma machine components (rotors, reflector, and plugboard).
+    """
     parser = argparse.ArgumentParser(description="Setting up the Enigma Machine.")
 
     # Command-line arguments for configuring the Enigma machine
@@ -31,13 +34,19 @@ def setup_enigma():
     args = parser.parse_args()
 
     # Creating Enigma components
-    rotors = [Cr_rotor(model, window) for model, window in zip(args.rotors, args.mode)]
-    reflector = Cr_reflector(args.reflector)
+    if args.rotors is None or args.mode is None:
+        raise ValueError("Both --rotors and --mode arguments must be provided.")
+    if len(args.rotors) != len(args.mode):
+        raise ValueError("Number of rotors and number of initial positions must match.")
+    # Validate plugboard swaps
+    for swap in args.Plugs:
+        if len(swap) != 2:
+            raise ValueError(f"Each plugboard swap must be exactly two characters: '{swap}' is invalid.")
     plugboard = Cr_plugboard(*args.Plugs)
+    reflector = Cr_reflector(args.reflector)
+    rotors = [Cr_rotor(model, window, idx) for idx, (model, window) in enumerate(zip(args.rotors, args.mode))]
 
     return rotors, reflector, plugboard
-
-
 
 
 # Defining the Wrapper funtions for creating all the Components.
@@ -48,7 +57,7 @@ def Cr_reflector(model):
     return Reflector(model)
 
 def Cr_plugboard(*swaps):
-    return Plugboard(swaps)
+    return Plugboard(*swaps)
 
 
 
