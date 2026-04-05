@@ -8,6 +8,28 @@ def main():
     Machine = EnigmaCircuit(rotorConf, reflector, plugboard)
     print("Enigma Machine is ready. Press ESC to exit.")
     
+    def on_press(key):
+        try:
+            # handle normal character keys
+            char = key.char.upper()
+            if char.isalpha():
+                print(Machine.Encryption(char))
+        except AttributeError:
+            #Handle special keys (like ESC)
+            if key == keyboard.Key.esc:
+                print("\nExiting...")
+                return False #Stops the listener
+            
+    with keyboard.Listener(on_press=on_press) as listener:
+        listener.join()
+            
+
+
+
+
+
+    #This block of code is in the previous version that does not work on macOS, only on windows because of lesser support of keyboard module
+    """
     while True:
         event = keyboard.read_event()
         if event.event_type == keyboard.KEY_DOWN:
@@ -17,7 +39,7 @@ def main():
                 break
             elif len(char) == 1 and char.isalpha():
                 print(Machine.Encryption(char))
-
+    """
 def setup_enigma():
     """
     Parses command-line arguments and sets up the Enigma machine components (rotors, reflector, and plugboard).
