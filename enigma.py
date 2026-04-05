@@ -13,7 +13,7 @@ def main():
             # handle normal character keys
             char = key.char.upper()
             if char.isalpha():
-                print(Machine.Encryption(char))
+                print(f"\n{Machine.Encryption(char)}")
         except AttributeError:
             #Handle special keys (like ESC)
             if key == keyboard.Key.esc:
