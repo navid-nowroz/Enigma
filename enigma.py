@@ -1,6 +1,6 @@
 # Importing stuff
 import argparse
-#import keyboard
+#import keyboard (previous code)
 from pynput import keyboard
 
 # Defining the Main function
