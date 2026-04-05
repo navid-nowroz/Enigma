@@ -1,6 +1,6 @@
 # Importing stuff
 import argparse
-import keyboard
+from pynput import keyboard
 
 # Defining the Main function
 def main():
