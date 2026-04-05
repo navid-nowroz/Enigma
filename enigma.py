@@ -14,11 +14,11 @@ def main():
             # handle normal character keys
             char = key.char.upper()
             if char.isalpha():
-                print(f"\n{Machine.Encryption(char)}")
+                print(Machine.Encryption(char))
         except AttributeError:
             #Handle special keys (like ESC)
             if key == keyboard.Key.esc:
-                print("Exiting...")
+                print("\nExiting...")
                 return False #Stops the listener
             
     with keyboard.Listener(on_press=on_press, suppress=True) as listener:
