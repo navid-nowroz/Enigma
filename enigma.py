@@ -8,7 +8,7 @@ def main():
     rotorConf, reflector, plugboard = setup_enigma()
     Machine = EnigmaCircuit(rotorConf, reflector, plugboard)
     print("Enigma Machine is ready. Press ESC to exit.")
-    
+    # For macWorks
     def on_press(key):
         try:
             # handle normal character keys
