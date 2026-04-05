@@ -1,5 +1,6 @@
 # Importing stuff
 import argparse
+#import keyboard
 from pynput import keyboard
 
 # Defining the Main function
@@ -17,10 +18,10 @@ def main():
         except AttributeError:
             #Handle special keys (like ESC)
             if key == keyboard.Key.esc:
-                print("\nExiting...")
+                print("Exiting...")
                 return False #Stops the listener
             
-    with keyboard.Listener(on_press=on_press) as listener:
+    with keyboard.Listener(on_press=on_press, suppress=True) as listener:
         listener.join()
             
 
