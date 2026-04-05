@@ -41,6 +41,12 @@ def main():
             elif len(char) == 1 and char.isalpha():
                 print(Machine.Encryption(char))
     """
+
+
+
+
+
+
 def setup_enigma():
     """
     Parses command-line arguments and sets up the Enigma machine components (rotors, reflector, and plugboard).
