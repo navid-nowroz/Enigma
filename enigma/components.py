@@ -17,9 +17,9 @@ class EnigmaCircuit:
         to_step = [False] * n
         to_step[-1] = True
 
-        # If rotor i (from left 0..n-1) is at notch, it causes rotor to its left to step on next keypress.
-        # We check from right towards left to mark stepping caused by notches.
-        # Proper behavior: if rotor i-1 is at notch, rotor i steps. That produces double-step for the middle rotor.
+        #iterates over the rotor set from the right
+        #when a rotor (i-1) is at notch next rotor (i) moves
+        #sets the stepping value for the changing rotor to be true
         for i in range(n - 1, 0, -1):
             if self.Rotors[i - 1].at_notch():
                 to_step[i] = True
@@ -79,19 +79,19 @@ class Rotor:
 
     # Defining the __init__ method
     def __init__(self, model, window, position = 0):
-        self.Access = Rotor.MODELS["ENTRY"]  # Right side alphabet
-        self.Position = position  # Not used currently for ring settings but kept
+        self.Access = Rotor.MODELS["ENTRY"]  # light side of the rotor
+        self.Position = position  # determines the position of the rotor
         self.Model = model.upper().strip()
         if self.Model not in Rotor.MODELS:
             raise ValueError(f"This program only supports the following rotor models: {', '.join(Rotor.MODELS)}.")
-        self.Rotor = Rotor.MODELS[self.Model]  # Wiring mapping right->left as string
-        # Build inverse mapping for reverse path (left->right)
+        self.Rotor = Rotor.MODELS[self.Model]  # left side of the rotor
+        # left side as a key and right as a value
         self.InverseMap = { self.Rotor[i]: self.Access[i] for i in range(26) }
-        self.Window = window.upper().strip()  # The visible letter in the window
-        self.Pass = False  # not used for stepping now (kept for compatibility)
+        self.Window = window.upper().strip()  # state of the visible window
+        self.Pass = False  # default stepping stage
 
     def at_notch(self):
-        # Return True if rotor is currently on a notch position that causes left rotor to step
+        # returns true if the left notch has to change
         notches = Rotor.WINDOWS.get(self.Model, [])
         return self.Window in notches
 
@@ -101,8 +101,8 @@ class Rotor:
         # then return the letter in the rotor's left side reference (which will then be fed to next stage).
         offset = self.Access.index(self.Window)
         in_idx = self.Access.index(character)
-        stepped = (in_idx + offset) % 26
-        mapped = self.Rotor[stepped]               # letter on left side
+        next = (in_idx + offset) % 26
+        mapped = self.Rotor[next]               # letter on left side
         # To feed into next component (reflector or next rotor), convert mapped letter back into Access alphabet
         # by finding its index in rotor left side wiring and then adjusting back by offset.
         # BUT since we return a letter, simply return mapped; caller interprets letters consistently.
