@@ -2,7 +2,7 @@
 import enigma
 
 #Importing from flask 
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, session
 
 
 #Initiating flask app
