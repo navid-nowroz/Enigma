@@ -1,0 +1,31 @@
+<!-- templates/layout.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Odessey Enigma</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Shared CSS -->
+    <link rel="stylesheet" href="static/styles.css">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <h1>Enigma Machine Simulator</h1>
+        <nav>
+            <a href="{{url_for('/setup')}}" class="btn">Reconfigure</a>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p>© 2026 Enigma Project</p>
+    </footer>
+</body>
+</html>

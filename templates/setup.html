@@ -1,0 +1,46 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<section class="setup-form">
+    <h2>Configure Your Enigma Machine</h2>
+    <form method="POST">
+        <!-- Rotor configuration -->
+        <div class="form-group">
+            <label for="rotors">Rotors (left to right):</label>
+            <input type="text" id="rotors" name="rotors" placeholder="e.g. I II III" required>
+            <small>Enter rotor models separated by spaces (I, II, III, IV, V, VI, VII, VIII, BETA, GAMMA).</small>
+        </div>
+
+        <!-- Rotor window positions -->
+        <div class="form-group">
+            <label for="positions">Rotor Window Positions:</label>
+            <input type="text" id="positions" name="positions" placeholder="e.g. A B C" required>
+            <small>Enter initial window letters separated by spaces.</small>
+        </div>
+
+        <!-- Reflector -->
+        <div class="form-group">
+            <label for="reflector">Reflector:</label>
+            <select id="reflector" name="reflector" required>
+                <option value="">--Select Reflector--</option>
+                <option value="B">B</option>
+                <option value="C">C</option>
+                <option value="BT">BT</option>
+                <option value="CT">CT</option>
+            </select>
+        </div>
+
+        <!-- Plugboard swaps -->
+        <div class="form-group">
+            <label for="plugboard">Plugboard Swaps:</label>
+            <input type="text" id="plugboard" name="plugboard" placeholder="e.g. AB CD EF">
+            <small>Enter up to 10 pairs of letters separated by spaces.</small>
+        </div>
+
+        <!-- Submit -->
+        <div class="form-actions">
+            <button type="submit" class="btn-primary">Start Machine</button>
+        </div>
+    </form>
+</section>
+{% endblock %}

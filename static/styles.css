@@ -1,0 +1,138 @@
+/* General reset */
+body {
+    margin: 0;
+    font-family: "Segoe UI", Arial, sans-serif;
+    background-color: #f4f4f9;
+    color: #333;
+}
+
+/* Header */
+header {
+    background-color: #222;
+    color: #fff;
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 1.5rem;
+}
+
+header nav .btn {
+    background-color: #555;
+    color: #fff;
+    padding: 0.5rem 1rem;
+    text-decoration: none;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+}
+
+header nav .btn:hover {
+    background-color: #777;
+}
+
+/* Main content */
+main {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 1rem;
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    padding: 1rem;
+    background-color: #222;
+    color: #ccc;
+    font-size: 0.9rem;
+}
+
+/* Form styling */
+.setup-form form {
+    background-color: #fff;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #aaa;
+    border-radius: 4px;
+}
+
+.form-group small {
+    display: block;
+    margin-top: 0.3rem;
+    color: #666;
+    font-size: 0.85rem;
+}
+
+/* Buttons */
+.btn-primary {
+    background-color: #0066cc;
+    color: #fff;
+    padding: 0.7rem 1.2rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+.btn-primary:hover {
+    background-color: #004c99;
+}
+
+/* Machine page */
+.configuration {
+    background-color: #fff;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    margin-bottom: 2rem;
+}
+
+.configuration p {
+    margin: 0.5rem 0;
+}
+
+/* Lightbulb */
+.lightbulb-container {
+    text-align: center;
+}
+
+.lightbulb {
+    display: inline-block;
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background-color: #fdfd96;
+    box-shadow: 0 0 30px rgba(255, 255, 150, 0.8);
+    font-size: 2rem;
+    font-weight: bold;
+    color: #333;
+    line-height: 120px;
+    text-align: center;
+    margin: 0 auto;
+    transition: box-shadow 0.3s ease;
+}
+
+.lightbulb:not(:empty) {
+    box-shadow: 0 0 40px rgba(255, 255, 100, 1);
+}

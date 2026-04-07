@@ -96,14 +96,12 @@ class Rotor:
         return self.Window in notches
 
     def entry_conversion(self, character):
-        # Forward pass through rotor (right->left)
-        # Convert input letter to index on Access, apply rotation offset, map through rotor wiring,
-        # then return the letter in the rotor's left side reference (which will then be fed to next stage).
-        offset = self.Access.index(self.Window)
-        in_idx = self.Access.index(character)
-        next = (in_idx + offset) % 26
+        # going right to left
+        offset = self.Access.index(self.Window) # gets the difference of the letters
+        in_idx = self.Access.index(character)   # gets the character
+        next = (in_idx + offset) % 26           # kinda rolls the rotor
         mapped = self.Rotor[next]               # letter on left side
-        # To feed into next component (reflector or next rotor), convert mapped letter back into Access alphabet
+        # gets the next character to be passed on
         # by finding its index in rotor left side wiring and then adjusting back by offset.
         # BUT since we return a letter, simply return mapped; caller interprets letters consistently.
         return mapped
