@@ -10,6 +10,17 @@ app = Flask(__name__)
 app.secret_key = "Ayman is a little dickhead to take all the credits on the slides"  # Needed for session handling
 
 
+# Defining the form parsing function
+def validate_and_parse_form(form):
+        rotors = form.get("rotors", "").split(",")
+        mode = form.get("mode", "").split(",")
+        reflector_choice = form.get("reflector","").split(",")
+        plugs = form.get("plugs", "").split()
+
+        if not rotors or not mode or not reflector_choice:
+                return render_template("apology.html", text = "rotors, mode and reflectors are required")
+
+
 @app.route("/", methods = ["POST", "GET"])
 def index():
         if request.method() == "GET":
@@ -30,4 +41,15 @@ def machine():
                 ...
 
         elif request.method() == "POST":
-                
+                # Get form values from POST
+                plugs = request.form.get("plugs", "").split(",")
+                rotors = request.form.get("rotors", "").split(",")
+                mode = request.form.get("mode", "").split(",")
+
+
+
+
+
+
+if __name__ == "__main__":
+        app.run(debug=True)
