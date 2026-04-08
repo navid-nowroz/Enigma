@@ -10,6 +10,12 @@ app = Flask(__name__)
 app.secret_key = "Ayman is a little dickhead to take all the credits on the slides"  # Needed for session handling
 
 
+def SESSION_CHECKER():
+        return (("rotors" in session["enigma_config"]) and 
+        ("mode" in session["enigma_configuration"]) and 
+        ("reflector" in session["enigma_configuration"]))
+
+
 # Defining the form parsing function
 def validate_and_parse_form(form):
         rotors = form.get("rotors", "").split(",")
@@ -30,9 +36,9 @@ def validate_and_parse_form(form):
 @app.route("/", methods = ["POST", "GET"])
 def index():
         if request.method() == "GET":
-                if not (("rotor_models" in session) and ("windows" in session) and ("reflector" in session)):
+                if not (SESSION_CHECKER()):
                         return render_template("setup.html")
-                elif ("rotor_models" in session) and ("windows" in session) and ("reflector" in session):
+                elif SESSION_CHECKER():
                         return redirect("{{url_for('machine')}}")
 
         elif request.method() == "POST":
@@ -41,13 +47,25 @@ def index():
 
 @app.route("/machine", methods = ["POST", "GET"])
 def machine():
-        if request.method() == "GET" and not (("rotor_models" in session) and ("windows" in session) and ("reflector" in session)):
+        if request.method() == "GET" and not (SESSION_CHECKER()):
                 return redirect("{{url_for('index')}}")
-        elif request.method() == "GET" and (("rotor_models" in session) and ("windows" in session) and ("reflector" in session)):
+        elif request.method() == "GET" and (SESSION_CHECKER()):
                 ...
 
         elif request.method() == "POST":
-                ...
+                try:
+                        rotors, mode, reflector_choice, plugs = validate_and_parse_form(request.form)
+                except ValueError as e:
+                        return jsonify({"ok": False, "error": str(e)}, 400)
+
+                # Save configuration in session (safe serializable data)
+                session["enigma_config"] = {
+                        "rotors": rotors,
+                        "mode": mode,
+                        "reflector": reflector_choice,
+                        "plugs": plugs
+                }
+                return jsonify({"ok": True, "message": "Configuration saved."})
 
 
 
