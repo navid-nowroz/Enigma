@@ -18,12 +18,12 @@ def validate_and_parse_form(form):
         plugs = form.get("plugs", "").split()
 
         if not rotors or not mode or not reflector_choice:
-                return render_template("apology.html", text = "rotors, mode and reflectors are required")
+                raise ValueError("rotor, mode and reflector ")
         if len(rotors) != len(mode):
-                return render_template("apology.html", text="number of rotors and number of initial positions must match")
+                raise ValueError("Number of rotors and number of initial positions must match")
         for swap in plugs:
                 if len(swap) != 2:
-                        return render_template("apology.html", text=f"Invalid plug swap: {swap}")
+                        raise ValueError(f"Invalid plug swap : {swap}")
         return rotors, mode, reflector_choice, plugs
 
 
@@ -47,10 +47,7 @@ def machine():
                 ...
 
         elif request.method() == "POST":
-                # Get form values from POST
-                plugs = request.form.get("plugs", "").split(",")
-                rotors = request.form.get("rotors", "").split(",")
-                mode = request.form.get("mode", "").split(",")
+                ...
 
 
 
