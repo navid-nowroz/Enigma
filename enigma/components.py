@@ -1,6 +1,6 @@
 # Defining the EnigmaCircuit Class.
 class EnigmaCircuit:
-    def __init__(self, rotors:list, reflector:list, plugboard:list):
+    def __init__(self, rotors:list, reflector:str, plugboard:list):
         self.Rotors = rotors  # Loading the rotors (left to right)
         self.Reflector = reflector
         self.Plugboard = plugboard
