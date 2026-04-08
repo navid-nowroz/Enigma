@@ -19,6 +19,12 @@ def validate_and_parse_form(form):
 
         if not rotors or not mode or not reflector_choice:
                 return render_template("apology.html", text = "rotors, mode and reflectors are required")
+        if len(rotors) != len(mode):
+                return render_template("apology.html", text="number of rotors and number of initial positions must match")
+        for swap in plugs:
+                if len(swap) != 2:
+                        return render_template("apology.html", text=f"Invalid plug swap: {swap}")
+        return rotors, mode, reflector_choice, plugs
 
 
 @app.route("/", methods = ["POST", "GET"])
