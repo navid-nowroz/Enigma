@@ -94,12 +94,12 @@ def setup():
 
 @app.route("/machine", methods = ["POST", "GET"])
 def machine():
-        if request.method() == "GET" and not (SESSION_CHECKER()):
+        if request.method == "GET" and not (SESSION_CHECKER()):
                 return redirect("{{url_for('index')}}")
-        elif request.method() == "GET" and (SESSION_CHECKER()):
+        elif request.method == "GET" and (SESSION_CHECKER()):
                 ...
 
-        elif request.method() == "POST":
+        elif request.method == "POST":
                 ...
 
 
