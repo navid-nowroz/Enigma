@@ -1,117 +1,25 @@
-# Importing stuff
-import argparse
-#import keyboard (previous code)
-from pynput import keyboard
-
-# Defining the Main function
-def main():
-    rotorConf, reflector, plugboard = setup_enigma()
-    Machine = EnigmaCircuit(rotorConf, reflector, plugboard)
-    print("Enigma Machine is ready. Press ESC to exit.")
-    # For macWorks
-    def on_press(key):
-        try:
-            # handle normal character keys
-            char = key.char.upper()
-            if char.isalpha():
-                print(Machine.Encryption(char))
-        except AttributeError:
-            #Handle special keys (like ESC)
-            if key == keyboard.Key.esc:
-                print("\nExiting...")
-                return False #Stops the listener
-            
-    with keyboard.Listener(on_press=on_press, suppress=True) as listener:
-        listener.join()
-            
-
-
-
-
-
-    #This block of code is in the previous version that does not work on macOS, only on windows because of lesser support of keyboard module
-    """
-    while True:
-        event = keyboard.read_event()
-        if event.event_type == keyboard.KEY_DOWN:
-            char = str(event.name).strip().upper()
-            if char == "ESC":
-                print("\nExiting....")
-                break
-            elif len(char) == 1 and char.isalpha():
-                print(Machine.Encryption(char))
-    """
-
-
-
-
-
-
-def setup_enigma():
-    """
-    Parses command-line arguments and sets up the Enigma machine components (rotors, reflector, and plugboard).
-    """
-    parser = argparse.ArgumentParser(description="Setting up the Enigma Machine.")
-
-    # Command-line arguments for configuring the Enigma machine
-    parser.add_argument("Plugs", metavar="Plug", nargs="*", help="Plugboard swaps (pairs of characters)")
-    parser.add_argument("-R", "--rotors", nargs="+", help="Rotor models in order from left to right")
-    parser.add_argument("-M", "--mode", nargs="+", help="Initial rotor window positions")
-    parser.add_argument("--reflector", type=str, choices=["B", "C", "BT", "CT"], help="Reflector model")
-
-    # Parse arguments
-    args = parser.parse_args()
-
-    # Creating Enigma components
-    if args.rotors is None or args.mode is None:
-        raise ValueError("Both --rotors and --mode arguments must be provided.")
-    if len(args.rotors) != len(args.mode):
-        raise ValueError("Number of rotors and number of initial positions must match.")
-    # Validate plugboard swaps
-    for swap in args.Plugs:
-        if len(swap) != 2:
-            raise ValueError(f"Each plugboard swap must be exactly two characters: '{swap}' is invalid.")
-    plugboard = Cr_plugboard(*args.Plugs)
-    reflector = Cr_reflector(args.reflector)
-    rotors = [Cr_rotor(model, window, idx) for idx, (model, window) in enumerate(zip(args.rotors, args.mode))]
-
-    return rotors, reflector, plugboard
-
-
-# Defining the Wrapper funtions for creating all the Components.
-def Cr_rotor(model, window, position = 0):
-    return Rotor(model, window, position)   # Has check_passing and step method
-
-def Cr_reflector(model):
-    return Reflector(model)
-
-def Cr_plugboard(*swaps):
-    return Plugboard(*swaps)
-
-
 # Defining the EnigmaCircuit Class.
 class EnigmaCircuit:
-    def __init__(self, rotors, reflector, plugboard):
+    def __init__(self, rotors:list, reflector:str, plugboard:list):
         self.Rotors = rotors  # Loading the rotors (left to right)
         self.Reflector = reflector
         self.Plugboard = plugboard
 
     def step_rotors(self):
-        # Implement notch-based stepping that produces the correct double-step behaviour.
-        # Rotors are stored left->right in self.Rotors.
-        # We only step before encoding a key press.
+        #Implements the notch based stepping
+        #left to right rotor set
+        #Only steps before encoding a key press
         n = len(self.Rotors)
         if n == 0:
             return
 
-        # Determine which rotors should step.
-        # Rightmost rotor always steps.
+        #makes the rightmost rotor to turn
         to_step = [False] * n
         to_step[-1] = True
 
-        # If rotor i (from left 0..n-1) is at notch, it causes rotor to its left to step on next keypress.
-        # We check from right towards left to mark stepping caused by notches.
-        # Proper behavior: if rotor i-1 is at notch, rotor i steps. That produces double-step for the middle rotor.
+        #iterates over the rotor set from the right
+        #when a rotor (i-1) is at notch next rotor (i) moves
+        #sets the stepping value for the changing rotor to be true
         for i in range(n - 1, 0, -1):
             if self.Rotors[i - 1].at_notch():
                 to_step[i] = True
@@ -171,31 +79,29 @@ class Rotor:
 
     # Defining the __init__ method
     def __init__(self, model, window, position = 0):
-        self.Access = Rotor.MODELS["ENTRY"]  # Right side alphabet
-        self.Position = position  # Not used currently for ring settings but kept
+        self.Access = Rotor.MODELS["ENTRY"]  # light side of the rotor
+        self.Position = position  # determines the position of the rotor
         self.Model = model.upper().strip()
         if self.Model not in Rotor.MODELS:
             raise ValueError(f"This program only supports the following rotor models: {', '.join(Rotor.MODELS)}.")
-        self.Rotor = Rotor.MODELS[self.Model]  # Wiring mapping right->left as string
-        # Build inverse mapping for reverse path (left->right)
+        self.Rotor = Rotor.MODELS[self.Model]  # left side of the rotor
+        # left side as a key and right as a value
         self.InverseMap = { self.Rotor[i]: self.Access[i] for i in range(26) }
-        self.Window = window.upper().strip()  # The visible letter in the window
-        self.Pass = False  # not used for stepping now (kept for compatibility)
+        self.Window = window.upper().strip()  # state of the visible window
+        self.Pass = False  # default stepping stage
 
     def at_notch(self):
-        # Return True if rotor is currently on a notch position that causes left rotor to step
+        # returns true if the left notch has to change
         notches = Rotor.WINDOWS.get(self.Model, [])
         return self.Window in notches
 
     def entry_conversion(self, character):
-        # Forward pass through rotor (right->left)
-        # Convert input letter to index on Access, apply rotation offset, map through rotor wiring,
-        # then return the letter in the rotor's left side reference (which will then be fed to next stage).
-        offset = self.Access.index(self.Window)
-        in_idx = self.Access.index(character)
-        stepped = (in_idx + offset) % 26
-        mapped = self.Rotor[stepped]               # letter on left side
-        # To feed into next component (reflector or next rotor), convert mapped letter back into Access alphabet
+        # going right to left
+        offset = self.Access.index(self.Window) # gets the difference of the letters
+        in_idx = self.Access.index(character)   # gets the character
+        next = (in_idx + offset) % 26           # kinda rolls the rotor
+        mapped = self.Rotor[next]               # letter on left side
+        # gets the next character to be passed on
         # by finding its index in rotor left side wiring and then adjusting back by offset.
         # BUT since we return a letter, simply return mapped; caller interprets letters consistently.
         return mapped
@@ -268,8 +174,3 @@ class Plugboard:
         if len(set("".join(swaps))) != len("".join(swaps)):  # Prevent duplicate characters
             raise ValueError("A character cannot be swapped more than once.")
         self._swaps = set(swaps)
-
-
-# Access point
-if __name__ == "__main__":
-    main()

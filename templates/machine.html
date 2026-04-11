@@ -1,0 +1,22 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<section class="machine">
+    <!-- Current Configuration -->
+    <div class="configuration">
+        <h2>Current Configuration</h2>
+        <p><strong>Rotors:</strong> {{ rotors }}</p>
+        <p><strong>Positions:</strong> {{ positions }}</p>
+        <p><strong>Reflector:</strong> {{ reflector }}</p>
+        <p><strong>Plugboard:</strong> {{ plugboard }}</p>
+    </div>
+
+    <!-- Lightbulb Output -->
+    <div class="lightbulb-container">
+        <h2>Output</h2>
+        <div id="lightbulb" class="lightbulb">
+            {{ output }}
+        </div>
+    </div>
+</section>
+{% endblock %}
