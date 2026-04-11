@@ -93,13 +93,23 @@ def setup():
 
 @app.route("/machine", methods = ["POST", "GET"])
 def machine():
-        if request.method == "GET" and not (SESSION_CHECKER()):
-                return redirect(url_for('index'))
-        elif request.method == "GET" and (SESSION_CHECKER()):
-                ...
+        if request.method == "GET":
+                if not  SESSION_CHECKER():
+                        return redirect(url_for("setup"))
+                cfg = session["enigma_config"]
+                returnrender_template("machine.html", config=cfg)
 
         elif request.method == "POST":
-                ...
+                message = request.form.get("Message", "")
+                if not message:
+                        return jsonify({"ok": False, "error": "No message provided."}), 400
+                enigma = build_circuit_from_session()
+                ciphertext = "".join(enigma.Ecryption(ch) for ch in message if ch.isalpha())
+                updated_windows = [r.Window for r in enigma.Rotors]
+                cfg = session["enigma_config"]
+                cfg["mode"] = updated_windows
+                session["enigma_config"] = cfg
+                return jsonify({"ok": True, "ciphertext": ciphertext, "windows": updated_windows})
 
 
 
