@@ -74,7 +74,7 @@ def setup():
                 if not (SESSION_CHECKER()):
                         return render_template("setup.html")
                 elif SESSION_CHECKER():
-                        return redirect("{{url_for('machine')}}")
+                        return redirect(f"{{url_for('machine')}}")
 
         elif request.method() == "POST":
                 try:
