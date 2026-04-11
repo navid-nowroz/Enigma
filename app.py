@@ -19,8 +19,8 @@ def SESSION_CHECKER():
 # Defining the form parsing function
 def validate_and_parse_form(form):
         rotors = form.get("rotors", "").split()
-        mode = form.get("mode", "").split()
-        reflector_choice = form.get("reflector","").split()
+        mode = list(form.get("mode", ""))
+        reflector_choice = form.get("reflector","")
         plugs = form.get("plugs", "").split()
 
         if not rotors or not mode or not reflector_choice:
