@@ -12,7 +12,7 @@ app.secret_key = "Ayman is a little dickhead to take all the credits on the slid
 
 def SESSION_CHECKER():
         cfg = session.get("enigma_config", {})
-        return all(k in cfg for k in ["rotors", "mode", "reflector"])
+        return cfg and all(k in cfg for k in ["rotors", "mode", "reflector"])
 
 
 # Defining the form parsing function
@@ -97,7 +97,7 @@ def machine():
                 if not  SESSION_CHECKER():
                         return redirect(url_for("setup"))
                 cfg = session["enigma_config"]
-                returnrender_template("machine.html", config=cfg)
+                return render_template("machine.html", config=cfg)
 
         elif request.method == "POST":
                 message = request.form.get("Message", "")
