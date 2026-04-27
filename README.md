@@ -1,4 +1,6 @@
-# Enigma Machine Simulator
+# ODYSSEY ENIGMA (Enigma Machine Simulator)
+
+## Video Demo: <https://youtu.be/9F7QoQ1kr0s>
 
 A Python-based implementation of the famous Enigma cipher machine, allowing users to encrypt messages using the same encryption mechanism employed during World War II.
 
@@ -14,27 +16,12 @@ This project simulates the Enigma machine, an electromechanical rotor cipher dev
 - **Authentic Rotor Stepping**: Implements proper notch-based rotor stepping with correct double-step behavior
 - **Real-time Encryption**: Interactive keyboard-based interface for live message encryption
 
-## Installation
-
-1. Clone the repository:
-```bash
-git clone https://github.com/navid-nowroz/Enigma.git
-cd Enigma
-```
-
-2. Install the required dependency:
-```bash
-pip install keyboard
-```
-
-> **Note**: The `keyboard` library requires administrator/root privileges on some systems.
-
 ## Usage
 
 Run the Enigma machine simulator with the following command:
 
 ```bash
-sudo python enigma.py -R [rotor models] -M [starting positions] --reflector [reflector model] [plugboard swaps]
+sudo python3 enigma.py -R [rotor models] -M [starting positions] --reflector [reflector model] [plugboard swaps]
 ```
 
 ### Arguments
@@ -55,16 +42,19 @@ sudo python enigma.py -R [rotor models] -M [starting positions] --reflector [ref
 ### Examples
 
 **Basic setup with three rotors:**
+
 ```bash
 sudo python enigma.py -R I II III -M A A A --reflector B
 ```
 
 **With plugboard configuration:**
+
 ```bash
 sudo python enigma.py -R I II III -M Q E V --reflector B AB CD EF
 ```
 
 **With rotors VI, VII, VIII:**
+
 ```bash
 sudo python enigma.py -R VI VII VIII -M A A A --reflector C GH IJ KL MN OP QR
 ```
@@ -94,18 +84,23 @@ The beauty of Enigma is that **the same settings used to encrypt will decrypt** 
 ## Components
 
 ### Rotor
+
 Implements the core encryption logic with:
+
 - Configurable wiring (10 different historical models)
 - Notch positions that trigger adjacent rotor stepping
 - Entry/exit conversion methods for forward and backward signal paths
 
 ### Reflector
+
 Bounces the signal back through the rotors using one of four historical reflector wirings, ensuring message encryption is symmetric.
 
 ### Plugboard
+
 Provides an initial substitution layer with up to 10 character-pair swaps, adding complexity to the encryption before rotor processing.
 
 ### EnigmaCircuit
+
 Orchestrates the complete encryption pipeline, managing rotor stepping and signal flow through all components.
 
 ## Limitations
@@ -121,7 +116,7 @@ The Enigma machine was famously broken by codebreakers at Bletchley Park during 
 ## Requirements
 
 - Python 3.6+
-- `keyboard` library
+- `pynput` library
 
 ## License
 
