@@ -7,6 +7,9 @@ from pynput import keyboard
 def main():
     rotorConf, reflector, plugboard = setup_enigma()
     Machine = EnigmaCircuit(rotorConf, reflector, plugboard)
+    print("This is a CLI Simulation of The Historic Enigma Machine.")
+    print("This is part of the Odyssey-Enigma Project, by Team Hera.")
+    print("All the software component of this project was built by Syed Navid Nowroz Twoki> All rights reserved")
     print("Enigma Machine is ready. Press ESC to exit.")
     # For macWorks
     def on_press(key):
